@@ -1,0 +1,17 @@
+#iconIndex{
+	height: 60px;
+}
+
+.navbar {
+    margin-bottom: 0;
+}
+
+.jumbotron {
+	background-image: url("../../images/elearning.jpg");
+ 	background-size: 100% 100%;
+ 	height: 650px;
+}
+.buttonIndex {
+	margin-top: 14px;
+	margin-right: 30px;
+}
