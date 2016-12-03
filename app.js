@@ -9,6 +9,9 @@ var morgan = require('morgan');
 var MongoStore = require('connect-mongo')(session);
 var mongoConnectionString = require('./configs/config.js').mongoConnectionString;
 var userController = require('./controllers/user');
+var courseController = require('./controllers/course');
+var lessonController = require('./controllers/lesson');
+
 // Connect to the beerlocker MongoDB
 mongoose.connect(mongoConnectionString);
 
@@ -30,7 +33,7 @@ app.use(session({
     saveUninitialized: true,
     store: new MongoStore({
         url: mongoConnectionString,
-        ttl: 3 * 60
+        ttl: 10 * 60
     })
 }));
 // config passport
@@ -45,16 +48,33 @@ var router = express.Router();
 // Create endpoint handlers for /users
 router.route('/users')
     .get(userController.getUsers)
+    .post(userController.postUsers);
+
+router.route('/courses')
+    .get(courseController.getCourses)
+    .post(courseController.postCourses);
+
+router.get('/courses/:id', courseController.getCourseById);
+
+router.route('/lessons')
+    .get(lessonController.getLessons)
+    .post(lessonController.postLessons);
+
+router.get('/lessons/:id', lessonController.getLessonById);
+router.get('/lessons/:courseId', lessonController.gerLessonsByCourseId);
 
 router.post('/login', passport.authenticate('local', {
     successRedirect: '/home',
-    failureRedirect: '/login' 
+    failureRedirect: '/login'
 }));
 
 app.use('/api', router);
 
+
+
 app.get('/', function(req, res) {
-    res.render('index');
+    var user = null
+    res.render('home', {user: user});
 });
 
 app.get('/signup', function(req, res) {
@@ -65,22 +85,44 @@ app.get('/login', function(req, res) {
     res.render('login');
 });
 
-//parammeter id course
-app.get('/course', function(req, res) {
-    res.render('course');
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
 });
+//parammeter id course
+app.get('/courses/:courseId', function(req, res) {
+    var user = null;
+    var course = { _id: req.params.courseId};
+    if(req.user){
+        user = {
+            _id: req.user._id,
+            name: req.user.name
+        }
+    }
+    res.render('course', {user: user, course: course});
+});
+
+
 
 //parammeter id lesson
 app.get('/lesson', function(req, res) {
-    res.render('lesson');
+    var user = {
+        _id: '1234567890',
+        name: 'Nguyen Anh Tu'
+    }
+    res.render('lesson', {user: user});
 });
 
 app.get('/home', function(req, res) {
-    if(req.isAuthenticated()){
-        res.render('home');
-    }else{
+    if (req.isAuthenticated()) {
+        var user = {
+            _id: req.user._id,
+            name: req.user.name
+        }
+        res.render('home', { user: user });
+    } else {
         res.redirect('/');
-    }        
+    }
 });
 // Start server
 app.listen(app.get('port'), function() {

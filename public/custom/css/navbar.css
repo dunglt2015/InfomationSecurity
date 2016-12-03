@@ -10,9 +10,14 @@
 }
 
 .a-fix{
-	margin-top: 5px; 
+	margin-top: 5px;
+	text-decoration: none; 
 }
 
 .white{
 	color: white;
+}
+
+.hidden{
+	display: none;
 }

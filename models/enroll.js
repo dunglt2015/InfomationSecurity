@@ -8,7 +8,7 @@ var EnrollSchema   = new mongoose.Schema({
   enrollTime: { type: Date, required: true, default: Date.now}
 });
 
-module.exports = mongoose.model('Enroll', CodeSchema);
+module.exports = mongoose.model('Enroll', EnrollSchema);
 
 /*
 status:

@@ -1,55 +1,57 @@
 'use strict'
 var Course = require('../models/course');
-var Enroll = require('../models/enroll')
-module.exports.postCourse = function(req, res){
-	if(req.body.image == undefined) req.body.image = 'course_default.jpg';
+var Enroll = require('../models/enroll');
 
-	var course = new Course({
-		description: req.body.description,
-		startTime: new Date(req.body.startTime),
-		endTime: new Date(req.body.endTime),
-		price: req.body.price,
-		sale: req.body.sale,
-		image: req.body.image,
-		rating: 0,
-		lessonId: []
-	});
+module.exports.postCourses = function(req, res) {
+    if (req.body.image == undefined) req.body.image = 'course_default.jpg';
 
-	course.save(function(err){
-		if(err)
-			return res.send(err);
-		res.json({message: 'course added!',data: course});
-	})
+    var course = new Course({
+        title: req.body.title,
+        lecturer: req.body.lecturer,
+        description: req.body.description,
+        price: req.body.price,
+        image: req.body.image,
+        lessonId: []
+    });
+
+    course.save(function(err) {
+        if (err){
+        	 return res.json({ err: true, message: 'Add course failed!', data: null });
+        }
+        res.json({ err: false, message: 'Course is added successful!', data: course });
+    })
 };
 
-module.exports.getCourses = function(req, res){
-	Course.find({}, function(err, courses){
-		if(err)
-			return res.send(err);
+module.exports.getCourses = function(req, res) {
+    Course.find({}, function(err, courses) {
+        if (err)
+            return res.send(err);
 
-		res.json(courses);
-	})
+        res.json(courses);
+    })
 };
 
-module.exports.getCourseById = function(req, res){
-	Course.find({_id: req.body.courseId}, function(err, course){
-		if(err)
-			return res.send(err);
-		res.json(course);
-	})
+module.exports.getCourseById = function(req, res) {
+	console.log(req.params.id);
+    Course.findOne({ _id: req.params.id }, function(err, course) {
+        if (err)
+            return res.send(err);
+        res.json(course);
+    })
 };
 
-module.exports.getCoursesByUserId = function(req, res){
-	Enroll.find({userId: req.user._id}, function(err, enrolls){
-		if(err){
-			return res.send(err);
-		}else{
-			var courseIds = enrolls.map(function(item){return item.enrolls});
-			Course.find({courseId: {$in: courseIds}}, function(err, courses){
-				if(err)
-					return res.send(err);
-				res.json(courses);
-			})
-		}
-	})
+module.exports.getCoursesByUserId = function(req, res) {
+    Enroll.find({ userId: req.user._id }, function(err, enrolls) {
+        if (err) {
+            return res.send(err);
+        } else {
+            var courseIds = enrolls.map(function(item) {
+                return item.courseId });
+            Course.find({ courseId: { $in: courseIds } }, function(err, courses) {
+                if (err)
+                    return res.send(err);
+                res.json(courses);
+            })
+        }
+    })
 };

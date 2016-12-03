@@ -12,16 +12,17 @@ module.exports.postUsers = function(req, res) {
     email: req.body.email,
     password: req.body.password,
     name: req.body.name,
-    birthday: new Date(req.body.birthday), // new Date('1994-18-02')
-    avatar: req.body.avatar,
     role: req.body.role
   });
 
   user.save(function(err) {
     if (err)
-      return res.send(err);
-
-    res.json({ message: 'New beer drinker added to the locker room!'});
+      if(err.code == 11000){
+        return res.json({err: true, message: 'Email is existed! Please try with another', data: null});
+      }else{
+        return res.json({err: true, message: 'Register failed!', data: null});
+      }
+    res.json({err: false, message: 'Register successful!', data: user});
   });
 };
 

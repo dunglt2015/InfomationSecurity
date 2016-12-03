@@ -89,6 +89,10 @@ h1 {
   border-radius: 4px;
 }
 
+a:link {
+    text-decoration: none;
+}
+
 .link {
   text-decoration: none;
   color: #C6C6C6;

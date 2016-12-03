@@ -20,12 +20,6 @@ var UserSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
-	birthday: {
-		type: Date
-	},	
-	avatar: {
-		type: String
-	},
 	role: {
 		type: Number, 
 		required: true
@@ -64,6 +58,5 @@ module.exports = mongoose.model('User', UserSchema);
 
 // role
 // 0 : guest
-// 1 : client not VIP
-// 2 : client VIP
-// 3 : admin
+// 1 : client
+// 2 : admin
