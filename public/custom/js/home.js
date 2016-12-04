@@ -2,7 +2,7 @@
 $(document).ready(function() {
     var $courseSlide = $("#courseSlide");
 
-    $.getJSON("http://localhost:8000/api/courses").done(function(courses) {
+    $.getJSON("https://localhost:8000/api/courses").done(function(courses) {
         var length = courses.length;
         var numberOfPage = Math.ceil(length / 4);
         var htmlString = '';

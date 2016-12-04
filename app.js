@@ -18,6 +18,15 @@ var filterip = require('./filterIP/filterip.js');
 
 var middleware = require('./middlewares/middleware.js');
 
+
+//https
+var https = require('https');
+var options = {
+  key: fs.readFileSync(__dirname + '/ssl_certificate/server.key'),
+  cert: fs.readFileSync(__dirname + '/ssl_certificate/server.crt')
+};
+
+
 // Connect to the beerlocker MongoDB
 mongoose.connect(mongoConnectionString);
 
@@ -42,7 +51,7 @@ app.use(bodyParser.urlencoded({
 app.use(express.static('public'));
 app.use(session({
     secret: 'anhtu',
-    cookie: { maxAge: 60000 },
+    cookie: { maxAge: 600000 },
     resave: true,
     saveUninitialized: true,
     store: new MongoStore({
@@ -115,6 +124,7 @@ app.get('/courses/:courseId', function(req, res) {
     if(req.user){
         user = {
             _id: req.user._id,
+            role: req.user.role,
             name: req.user.name
         }
     }
@@ -129,6 +139,7 @@ app.get('/lesson', function(req, res) {
     if(req.user){
         user = {
             _id: req.user._id,
+            role: req.user.role,
             name: req.user.name
         }
     }
@@ -139,6 +150,7 @@ app.get('/home', function(req, res) {
     if (req.isAuthenticated()) {
         var user = {
             _id: req.user._id,
+            role: req.user.role,
             name: req.user.name
         }
         res.render('home', { user: user });
@@ -147,6 +159,24 @@ app.get('/home', function(req, res) {
     }
 });
 // Start server
-app.listen(app.get('port'), function() {
-    console.log("server started on http://localhost:" + app.get('port') + ";\n please press Ctrl+C to terminate");
+
+app.get('/manage', middleware.isAdmin, function(req, res) {
+    var user = null;
+    if(req.user){
+        user = {
+            _id: req.user._id,
+            role: req.user.role,
+            name: req.user.name
+        }
+    }
+    res.render('manage', {user: user});
 });
+
+
+https.createServer(options, app).listen(8000, function () {
+   console.log('Started!');
+});
+
+// app.listen(app.get('port'), function() {
+//     console.log("server started on http://localhost:" + app.get('port') + ";\n please press Ctrl+C to terminate");
+// });

@@ -1,12 +1,12 @@
 
 .li1{
     height: 60px;
-    background-color: #6799ea;
+    /*background-color: #6799ea;*/
 }
 
 .li2{
     height: 60px;
-    background-color: #14d131;
+    /*background-color: #14d131;*/
 }
 
 .a-fix{
@@ -15,7 +15,7 @@
 }
 
 .white{
-	color: white;
+	color: black;
 }
 
 #iconIndex{

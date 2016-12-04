@@ -26,7 +26,6 @@ module.exports.getCourses = function(req, res) {
     Course.find({}, function(err, courses) {
         if (err)
             return res.send(err);
-
         res.json(courses);
     })
 };

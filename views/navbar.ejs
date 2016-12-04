@@ -11,7 +11,7 @@
                 <% if(!user){ %>
                    <li class="li1"><a href="/login" class="a-fix"><p class="white">Log In</p></a></li>
                    <li class="li2"><a href="/signup" class="a-fix"><p class="white">Sign Up</p></a></li>
-                 <% } else{ %>  
+                 <% }else if(user.role == 1){ %>  
                    <p class = "hidden" id="userId"><%= user._id%></p>
                    <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#"><%= user.name %>
@@ -19,6 +19,16 @@
                     <ul class="dropdown-menu">
                       <li><a href="#">Your Courses</a></li>
                       <li><a href="#">Profile</a></li>
+                      <li><a href="/logout">Log out</a></li> 
+                    </ul>
+                  </li>
+                <% }else{ %>
+                  <p class = "hidden" id="userId"><%= user._id%></p>
+                   <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"><%= user.name %>
+                    <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="/manage">Manage</a></li>
                       <li><a href="/logout">Log out</a></li> 
                     </ul>
                   </li>
