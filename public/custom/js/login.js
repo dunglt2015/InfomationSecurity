@@ -22,7 +22,7 @@ $(document).ready(function() {
       };
 
       $.ajax({
-          url: "http://localhost:3000/api/login",
+          url: "http://localhost:8000/api/login",
           dataType: "json",
           type: 'post',
           contentType: 'application/json',
@@ -32,7 +32,7 @@ $(document).ready(function() {
 
   function login(account) {
       return $.ajax({
-          url: "http://localhost:3000/api/login",
+          url: "http://localhost:8000/api/login",
           dataType: "json",
           type: 'post',
           contentType: 'application/json',

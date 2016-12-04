@@ -32,7 +32,7 @@ module.exports.getCourses = function(req, res) {
 };
 
 module.exports.getCourseById = function(req, res) {
-	console.log(req.params.id);
+    console.log(req.params.id);
     Course.findOne({ _id: req.params.id }, function(err, course) {
         if (err)
             return res.send(err);
@@ -40,18 +40,4 @@ module.exports.getCourseById = function(req, res) {
     })
 };
 
-module.exports.getCoursesByUserId = function(req, res) {
-    Enroll.find({ userId: req.user._id }, function(err, enrolls) {
-        if (err) {
-            return res.send(err);
-        } else {
-            var courseIds = enrolls.map(function(item) {
-                return item.courseId });
-            Course.find({ courseId: { $in: courseIds } }, function(err, courses) {
-                if (err)
-                    return res.send(err);
-                res.json(courses);
-            })
-        }
-    })
-};
+

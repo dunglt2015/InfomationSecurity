@@ -21,3 +21,14 @@
 .hidden{
 	display: none;
 }
+
+#iconIndex{
+	height: 60px;
+}
+
+
+.btn-enroll{
+	background-color: #4288f7;
+	margin-top: 15px;
+	color: white;
+}
