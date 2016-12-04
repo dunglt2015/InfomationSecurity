@@ -81,7 +81,7 @@ router.route('/courses')
 router.get('/courses/:id', courseController.getCourseById);
 
 //
-router.get('/enroll/:courseId/:userId', middleware.isAuthenticated ,enrollController.getEnrollCourseByBothId);
+router.get('/enroll/user/:courseId', middleware.isAuthenticated ,enrollController.isEnrolledCourse);
 router.get('/enroll/:id', middleware.isAuthenticated, enrollController.getEnrolledCourseByUserId);
 router.post('/enroll', middleware.isAuthenticated, enrollController.postEnrollCourse);
 
@@ -134,8 +134,9 @@ app.get('/courses/:courseId', function(req, res) {
 
 
 //parammeter id lesson
-app.get('/lesson', function(req, res) {
+app.get('/lessons/:id', function(req, res) {
     var user = null;
+    var lessonId = req.params.id;
     if(req.user){
         user = {
             _id: req.user._id,
@@ -143,7 +144,11 @@ app.get('/lesson', function(req, res) {
             name: req.user.name
         }
     }
-    res.render('lesson', {user: user});
+
+    var lesson = {
+        id: lessonId
+    }
+    res.render('lesson', {user: user, lesson: lesson});
 });
 
 app.get('/home', function(req, res) {

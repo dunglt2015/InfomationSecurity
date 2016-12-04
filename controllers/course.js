@@ -31,7 +31,6 @@ module.exports.getCourses = function(req, res) {
 };
 
 module.exports.getCourseById = function(req, res) {
-    console.log(req.params.id);
     Course.findOne({ _id: req.params.id }, function(err, course) {
         if (err)
             return res.send(err);
