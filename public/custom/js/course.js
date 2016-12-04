@@ -8,22 +8,14 @@ $(document).ready(function() {
     var $message = $('#message-hidden');
     var $messageLogin = $('#message-login-hidden');
 
-<<<<<<< HEAD
     $.getJSON("https://localhost:8000/api/courses/"+courseId).done(function(course) {
         console.log(course);
-=======
-    $.getJSON("http://localhost:8000/api/courses/"+courseId).done(function(course) {
->>>>>>> 2b2e64c75d01c8226a339773addd7c3c36c83ab5
         var htmlString_1 = "";
         htmlString_1 += "<h2>" + course.title + "</h2>";
         $content_1.append(htmlString_1);
 
-<<<<<<< HEAD
         $.getJSON("https://localhost:8000/api/lessons/course/"+courseId).done(function(lessons){
             console.log(lessons);
-=======
-        $.getJSON("http://localhost:8000/api/lessons/course/"+courseId).done(function(lessons){
->>>>>>> 2b2e64c75d01c8226a339773addd7c3c36c83ab5
             var htmlString_2 = "";
             var i;
 
@@ -52,15 +44,11 @@ $(document).ready(function() {
 
             $content_2.append(htmlString_2);
 
-<<<<<<< HEAD
-        $.getJSON("https://localhost:8000/api/enroll/"+ courseId + "/" + userId).done(function(enroll){
-=======
             var $listLesson = $('#list-lesson').find('.lesson').each(function(index){
                 $(this).on('click', showLesson);
             });
         });
-        $.getJSON("http://localhost:8000/api/enroll/user/"+ courseId).done(function(enroll){
->>>>>>> 2b2e64c75d01c8226a339773addd7c3c36c83ab5
+        $.getJSON("https://localhost:8000/api/enroll/user/"+ courseId).done(function(enroll){
             if(enroll.data){
                 $enrollBtn.addClass("hidden");
                 $message.removeClass("message");
@@ -75,7 +63,7 @@ $(document).ready(function() {
 
     function showLesson(){
         var lessonId = $(this).find('.hidden').text();
-        $.getJSON("http://localhost:8000/api/lessons/"+lessonId).done(function(res){
+        $.getJSON("https://localhost:8000/api/lessons/"+lessonId).done(function(res){
             console.log(res);
             if(res.err){
                 alert(res.message);
