@@ -61,7 +61,7 @@ router.route('/lessons')
     .post(lessonController.postLessons);
 
 router.get('/lessons/:id', lessonController.getLessonById);
-router.get('/lessons/:courseId', lessonController.gerLessonsByCourseId);
+router.get('/lessons/:courseId', lessonController.getLessonsByCourseId);
 
 router.post('/login', passport.authenticate('local', {
     successRedirect: '/home',
