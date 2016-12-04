@@ -11,6 +11,7 @@ var mongoConnectionString = require('./configs/config.js').mongoConnectionString
 var userController = require('./controllers/user');
 var courseController = require('./controllers/course');
 var lessonController = require('./controllers/lesson');
+var enrollController = require('./controllers/enroll');
 
 // Connect to the beerlocker MongoDB
 mongoose.connect(mongoConnectionString);
@@ -18,7 +19,7 @@ mongoose.connect(mongoConnectionString);
 var app = express();
 
 app.set('view engine', 'ejs');
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 8000);
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
@@ -33,7 +34,7 @@ app.use(session({
     saveUninitialized: true,
     store: new MongoStore({
         url: mongoConnectionString,
-        ttl: 10 * 60
+        ttl: 60 * 10
     })
 }));
 // config passport
@@ -56,12 +57,16 @@ router.route('/courses')
 
 router.get('/courses/:id', courseController.getCourseById);
 
+router.get('/enroll/:id',enrollController.getEnrollCourseByUserId);
+router.post('/enroll', enrollController.postEnrollCourse);
+
 router.route('/lessons')
     .get(lessonController.getLessons)
     .post(lessonController.postLessons);
 
 router.get('/lessons/:id', lessonController.getLessonById);
-router.get('/lessons/:courseId', lessonController.getLessonsByCourseId);
+
+router.get('/lessons/course/:courseId', lessonController.getLessonsByCourseId);
 
 router.post('/login', passport.authenticate('local', {
     successRedirect: '/home',
@@ -73,7 +78,7 @@ app.use('/api', router);
 
 
 app.get('/', function(req, res) {
-    var user = null
+    var user = null;
     res.render('home', {user: user});
 });
 
@@ -106,9 +111,12 @@ app.get('/courses/:courseId', function(req, res) {
 
 //parammeter id lesson
 app.get('/lesson', function(req, res) {
-    var user = {
-        _id: '1234567890',
-        name: 'Nguyen Anh Tu'
+    var user = null;
+    if(req.user){
+        user = {
+            _id: req.user._id,
+            name: req.user.name
+        }
     }
     res.render('lesson', {user: user});
 });
