@@ -37,7 +37,8 @@ module.exports.getEnrollCourseByBothId = function(req,res) {
     }});
 }
 
-module.exports.getEnrollCourseByUserId = function(req, res) {
+module.exports.getEnrolledCourseByUserId = function(req, res) {
+    console.log(req.params.id);
     Enroll.find({ userId: req.params.id }, function(err, enrolls) {
         if (err) {
             return res.send(err);
