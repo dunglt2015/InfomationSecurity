@@ -12,7 +12,7 @@
                    <li class="li1"><a href="/login" class="a-fix"><p class="white">Log In</p></a></li>
                    <li class="li2"><a href="/signup" class="a-fix"><p class="white">Sign Up</p></a></li>
                  <% } else{ %>  
-                   <p class = "hidden"><%= user._id%></p>
+                   <p class = "hidden" id="userId"><%= user._id%></p>
                    <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#"><%= user.name %>
                     <span class="caret"></span></a>

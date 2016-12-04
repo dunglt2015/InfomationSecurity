@@ -18,17 +18,37 @@
 	color: white;
 }
 
-.hidden{
-	display: none;
-}
-
 #iconIndex{
 	height: 60px;
 }
 
 
-.btn-enroll{
+.hidden{
+	display: none;
+}
+
+
+#btn-enroll{
 	background-color: #4288f7;
 	margin-top: 15px;
 	color: white;
+}
+
+.message{
+	display: none;
+}
+
+#message-hidden{
+	margin-top: 15px;
+	color: black;
+}
+
+
+.message-login{
+	display: none;
+}
+
+#message-login-hidden{
+	margin-top: 15px;
+	color: black;
 }

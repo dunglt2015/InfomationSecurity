@@ -2,8 +2,11 @@
 $(document).ready(function() {
     var $content_1 = $("#content1");
     var $content_2 = $("#content2");
+    var userId = $("#userId").text();
     var courseId = $('#courseId').text();
     var $enrollBtn = $('#btn-enroll');
+    var $message = $('#message-hidden');
+    var $messageLogin = $('#message-login-hidden');
 
     $.getJSON("http://localhost:8000/api/courses/"+courseId).done(function(course) {
         console.log(course);
@@ -15,11 +18,12 @@ $(document).ready(function() {
             console.log(lessons);
             var htmlString_2 = "";
             var i;
+
             htmlString_2 += "<div class='col-md-6'>";
             htmlString_2 += "<div class='list-group'>";
             for (i = 0; i < lessons.length; i++) {
                 var lesson = lessons[i];
-                htmlString_2 += "<a id='"+ lesson._id + "' class='list-group-item'>Bai " + lesson.indexNumber;
+                htmlString_2 += "<a href=/lesson/" + lesson._id + "' class='list-group-item'>Bai " + lesson.indexNumber;
                 htmlString_2 += "<h4 class='list-group-item-heading'>" + lesson.title + "</h4>";
                 if(lesson.status == 1){
                     htmlString_2 += "<span class='badge'>free</span>";
@@ -39,12 +43,43 @@ $(document).ready(function() {
 
             $content_2.append(htmlString_2);
         });
+
+        $.getJSON("http://localhost:8000/api/enroll/"+ courseId + "/" + userId).done(function(enroll){
+            if(enroll.data){
+                $enrollBtn.addClass("hidden");
+                $message.removeClass("message");
+            }else{
+                $enrollBtn.removeClass("hidden");
+                $messageLogin.removeClass("message-login-hidden");
+            }
+        });
     });
 
-    $enroll.on('click', enrollCourse);
+    $enrollBtn.on('click', enrollCourse);
 
     function enrollCourse(){
+        console.log("clicked");
+        var data = {
+            userId: userId,
+            courseId: courseId
+        };
 
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8000/api/enroll/",
+            data: data,
+            dataType: "json"
+        }).done(function(data){
+            if(data.data != 1){
+                $enrollBtn.addClass("hidden");
+                $message.removeClass("message");
+                console.log(data);
+            }else{
+                console.log(1);
+                $enrollBtn.addClass("hidden");
+                $messageLogin.removeClass("message-login");
+            }
+        });
     }
 
 });

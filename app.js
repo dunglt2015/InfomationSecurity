@@ -59,6 +59,7 @@ router.get('/courses/:id', courseController.getCourseById);
 
 router.get('/enroll/:id',enrollController.getEnrollCourseByUserId);
 router.post('/enroll', enrollController.postEnrollCourse);
+router.get('/enroll/:courseId/:userId',enrollController.getEnrollCourseByBothId);
 
 router.route('/lessons')
     .get(lessonController.getLessons)
