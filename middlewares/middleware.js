@@ -5,7 +5,7 @@ module.exports.isAuthenticated = function(req, res, next){
 	if(req.isAuthenticated()){
         return next();
     }else{
-        res.json({err: true, message: 'You must to login for using this feature'});
+        res.json({err: true, message: 'You must to login for using this feature', data: null});
     }
 };
 
@@ -14,10 +14,10 @@ module.exports.isAdmin = function(req, res, next){
         if(req.user.role == 2){
             return next();
         }else{
-            res.json({err: true, message: 'You must to be ADMIN for using this feature'});
+            res.json({err: true, message: 'You must to be ADMIN for using this feature', data: null});
         }
     }else{
-        res.json({err: true, message: 'You must to login for using this feature'});
+        res.json({err: true, message: 'You must to login for using this feature', data: null});
     }
 };
 

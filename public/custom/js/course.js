@@ -9,26 +9,25 @@ $(document).ready(function() {
     var $messageLogin = $('#message-login-hidden');
 
     $.getJSON("http://localhost:8000/api/courses/"+courseId).done(function(course) {
-        console.log(course);
         var htmlString_1 = "";
         htmlString_1 += "<h2>" + course.title + "</h2>";
         $content_1.append(htmlString_1);
 
         $.getJSON("http://localhost:8000/api/lessons/course/"+courseId).done(function(lessons){
-            console.log(lessons);
             var htmlString_2 = "";
             var i;
 
             htmlString_2 += "<div class='col-md-6'>";
-            htmlString_2 += "<div class='list-group'>";
+            htmlString_2 += "<div class='list-group' id='list-lesson'>";
             for (i = 0; i < lessons.length; i++) {
                 var lesson = lessons[i];
-                htmlString_2 += "<a href=/lesson/" + lesson._id + "' class='list-group-item'>Bai " + lesson.indexNumber;
+                htmlString_2 += "<a href='#' class='list-group-item lesson'>Bai " + lesson.indexNumber;
                 htmlString_2 += "<h4 class='list-group-item-heading'>" + lesson.title + "</h4>";
                 if(lesson.status == 1){
                     htmlString_2 += "<span class='badge'>free</span>";
                 }
                 htmlString_2 += "<p class='list-group-item-text'>" +  lesson.totalTime + "ph</p>";
+                htmlString_2 += "<span class='hidden'>" +  lesson._id + "</span>"
                 htmlString_2 += "</a>";
             }
             htmlString_2 += "</div></div>";
@@ -42,9 +41,12 @@ $(document).ready(function() {
             htmlString_2 += "<p>"+ course.price +"</p></a></div></div>";
 
             $content_2.append(htmlString_2);
-        });
 
-        $.getJSON("http://localhost:8000/api/enroll/"+ courseId + "/" + userId).done(function(enroll){
+            var $listLesson = $('#list-lesson').find('.lesson').each(function(index){
+                $(this).on('click', showLesson);
+            });
+        });
+        $.getJSON("http://localhost:8000/api/enroll/user/"+ courseId).done(function(enroll){
             if(enroll.data){
                 $enrollBtn.addClass("hidden");
                 $message.removeClass("message");
@@ -57,10 +59,21 @@ $(document).ready(function() {
 
     $enrollBtn.on('click', enrollCourse);
 
+    function showLesson(){
+        var lessonId = $(this).find('.hidden').text();
+        $.getJSON("http://localhost:8000/api/lessons/"+lessonId).done(function(res){
+            console.log(res);
+            if(res.err){
+                alert(res.message);
+            }else{
+                window.location.href = '/lessons/'+lessonId;
+            }
+        })
+    };
+
     function enrollCourse(){
         console.log("clicked");
         var data = {
-            userId: userId,
             courseId: courseId
         };
 
@@ -69,13 +82,11 @@ $(document).ready(function() {
             url: "http://localhost:8000/api/enroll/",
             data: data,
             dataType: "json"
-        }).done(function(data){
-            if(data.data != 1){
+        }).done(function(output){
+            if(!output.err){
                 $enrollBtn.addClass("hidden");
                 $message.removeClass("message");
-                console.log(data);
             }else{
-                console.log(1);
                 $enrollBtn.addClass("hidden");
                 $messageLogin.removeClass("message-login");
             }

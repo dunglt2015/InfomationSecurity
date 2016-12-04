@@ -36,19 +36,29 @@
 
 .message{
 	display: none;
+	font-size: 23px;
 }
 
 #message-hidden{
 	margin-top: 15px;
-	color: black;
 }
 
 
 .message-login{
 	display: none;
+	font-size: 23px;
+}
+
+.inform{
+	font-size: 21px;
+    color: green;
+}
+
+.error{
+	font-size: 21px;
+    color: red;
 }
 
 #message-login-hidden{
 	margin-top: 15px;
-	color: black;
 }
