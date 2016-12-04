@@ -4,7 +4,6 @@ var User = require('../models/user');
 // Create endpoint /api/users for POST
 
 module.exports.postUsers = function(req, res) {
-
   if(req.body.birthday == undefined) req.body.birthday = null;
   if(req.body.avatar == undefined) req.body.avatar = 'ava_default.jpg';
 

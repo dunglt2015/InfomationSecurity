@@ -1,4 +1,5 @@
 'use strict'
+var fs = require('fs');
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
@@ -13,6 +14,10 @@ var courseController = require('./controllers/course');
 var lessonController = require('./controllers/lesson');
 var enrollController = require('./controllers/enroll');
 
+var filterip = require('./filterIP/filterip.js');
+
+var middleware = require('./middlewares/middleware.js');
+
 // Connect to the beerlocker MongoDB
 mongoose.connect(mongoConnectionString);
 
@@ -21,7 +26,15 @@ var app = express();
 app.set('view engine', 'ejs');
 app.set('port', process.env.PORT || 8000);
 
+var accessLogStream = fs.createWriteStream(__dirname+'/logs/access.log', {flags: 'a'});
+
 app.use(morgan('dev'));
+app.use(morgan('combined', {stream: accessLogStream}));
+
+// filter ip
+app.use(filterip);
+
+// app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
@@ -47,8 +60,9 @@ require('./passport/local-passport.js')(passport);
 var router = express.Router();
 
 // Create endpoint handlers for /users
+
 router.route('/users')
-    .get(userController.getUsers)
+    .get([middleware.isAuthenticated, middleware.isAdmin], userController.getUsers)
     .post(userController.postUsers);
 
 router.route('/courses')
@@ -57,15 +71,14 @@ router.route('/courses')
 
 router.get('/courses/:id', courseController.getCourseById);
 
-router.get('/enroll/:id',enrollController.getEnrollCourseByUserId);
-router.post('/enroll', enrollController.postEnrollCourse);
+router.get('/enroll/:id', middleware.isAuthenticated, enrollController.getEnrolledCourseByUserId);
+router.post('/enroll', middleware.isAuthenticated, enrollController.postEnrollCourse);
 
 router.route('/lessons')
-    .get(lessonController.getLessons)
-    .post(lessonController.postLessons);
+    .get([middleware.isAuthenticated, middleware.isAdmin], lessonController.getLessons)
+    .post([middleware.isAuthenticated, middleware.isAdmin], lessonController.postLessons);
 
 router.get('/lessons/:id', lessonController.getLessonById);
-
 router.get('/lessons/course/:courseId', lessonController.getLessonsByCourseId);
 
 router.post('/login', passport.authenticate('local', {
@@ -74,7 +87,6 @@ router.post('/login', passport.authenticate('local', {
 }));
 
 app.use('/api', router);
-
 
 
 app.get('/', function(req, res) {
