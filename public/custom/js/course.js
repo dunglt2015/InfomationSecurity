@@ -8,13 +8,13 @@ $(document).ready(function() {
     var $message = $('#message-hidden');
     var $messageLogin = $('#message-login-hidden');
 
-    $.getJSON("https://localhost:8000/api/courses/"+courseId).done(function(course) {
+    $.getJSON("/api/courses/"+courseId).done(function(course) {
         console.log(course);
         var htmlString_1 = "";
         htmlString_1 += "<h2>" + course.title + "</h2>";
         $content_1.append(htmlString_1);
 
-        $.getJSON("https://localhost:8000/api/lessons/course/"+courseId).done(function(lessons){
+        $.getJSON("/api/lessons/course/"+courseId).done(function(lessons){
             console.log(lessons);
             var htmlString_2 = "";
             var i;
@@ -48,7 +48,7 @@ $(document).ready(function() {
                 $(this).on('click', showLesson);
             });
         });
-        $.getJSON("https://localhost:8000/api/enroll/user/"+ courseId).done(function(enroll){
+        $.getJSON("/api/enroll/user/"+ courseId).done(function(enroll){
             if(enroll.data){
                 $enrollBtn.addClass("hidden");
                 $message.removeClass("message");
@@ -63,7 +63,7 @@ $(document).ready(function() {
 
     function showLesson(){
         var lessonId = $(this).find('.hidden').text();
-        $.getJSON("https://localhost:8000/api/lessons/"+lessonId).done(function(res){
+        $.getJSON("/api/lessons/"+lessonId).done(function(res){
             console.log(res);
             if(res.err){
                 alert(res.message);
@@ -81,7 +81,7 @@ $(document).ready(function() {
 
         $.ajax({
             type: "POST",
-            url: "https://localhost:8000/api/enroll/",
+            url: "/api/enroll/",
             data: data,
             dataType: "json"
         }).done(function(output){

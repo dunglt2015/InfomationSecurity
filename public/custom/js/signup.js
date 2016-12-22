@@ -18,7 +18,7 @@ $(document).ready(function() {
             }
 
             $.ajax({
-                url: "https://localhost:8000/api/users",
+                url: "/api/users",
                 dataType: "json",
                 type: 'post',
                 contentType: 'application/json',

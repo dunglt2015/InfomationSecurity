@@ -4,8 +4,8 @@ $(document).ready(function() {
     var userId = $("#userId").text();
 
 
-    $.getJSON("https://localhost:8000/api/users").done(function(users){
-        $.getJSON("https://localhost:8000/api/courses").done(function(courses){
+    $.getJSON("/api/users").done(function(users){
+        $.getJSON("/api/courses").done(function(courses){
 
         var content = "";
         var i,j;
